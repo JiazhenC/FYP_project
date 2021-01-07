@@ -34,7 +34,6 @@ class _MainPageState extends State<MainPage> {
   var detected = [];
   bool isDetecting = false;
   bool systemRun = false;
-  TextEditingController _controller = TextEditingController();
   CameraController controller;
   String recognizedText = "No recognized text";
   String messageText = "Initialize Object Detection Model";
@@ -115,10 +114,12 @@ class _MainPageState extends State<MainPage> {
       double t = boundingBox.top;
       double b = boundingBox.bottom;
       if ((car_l <= l) && (car_r >= r) && (car_t <= t) && (car_b >= b)) {
-        recognizedText = block.text;
-        messageText = "License Plate is Detected";
+        if((block.text.contains(new RegExp(r'[A-Z]'))||block.text.contains(new RegExp(r'[a-z]')))&&block.text.contains(new RegExp(r'[0-9]'))) {
+          recognizedText = block.text;
+          messageText = "License Plate is Detected";
           setState(() {});
           return;
+        }
       }
     }
     isDetecting=false;
@@ -152,7 +153,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text=recognizedText;
     if (systemRun==false) {
       return Container(
         child: Icon(
@@ -178,7 +178,6 @@ class _MainPageState extends State<MainPage> {
         Row(
           children: [
             TextButton(
-                onPressed: dispose,
                 child: Text(recognizedText),
             ),
             IconButton(
@@ -186,6 +185,9 @@ class _MainPageState extends State<MainPage> {
               onPressed: (){isDetecting=false;},
             ),
             IconButton(icon: Icon(Icons.check), onPressed: (){Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    Vehicle_Detail_Page(vehicleID: recognizedText)));}),
+            IconButton(icon: Icon(Icons.edit), onPressed: (){Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
                     Vehicle_Detail_Page(vehicleID: recognizedText)));})
           ],

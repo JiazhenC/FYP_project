@@ -113,7 +113,6 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
     vehicles.doc(vehicleID).set({'paid':'yes'});
     setState(() {
     });
-
   }
   void callPhone(phone){
     setState(() {
@@ -123,6 +122,8 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
 
   @override
   Widget build(BuildContext context) {
+    vehicleID = vehicleID.replaceAll(RegExp(r' '), "");
+    vehicleID = vehicleID.toUpperCase();
     CollectionReference vehicles =
         FirebaseFirestore.instance.collection('vehicles');
     CollectionReference payment =
