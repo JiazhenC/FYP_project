@@ -1,16 +1,43 @@
-# lpr_prototype
+# Android LPR
 
-A new Flutter application.
+### Main Page
 
-## Getting Started
+Camera Preview
 
-This project is a starting point for a Flutter application.
+TextBox - User can key in the plate number to be searched on Firestore database. The characters would be converted to capital letters and space would be ignored.
 
-A few resources to get you started if this is your first Flutter project:
+Floating action button - User can press the button to search the target vehicle.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![image](https://raw.githubusercontent.com/JiazhenC/FYP_project/master/Screenshot%20Images/Main%20Page.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Vehicle Detail Page
+
+AppBar: Plate number
+        Edit Button - To nav to the Edit page
+        Delete Button - To delete the vehicle
+        
+Vehicle details
+
+Call button - To open up the phone's calling page with owner's number
+
+Vehicle enter button - Register the vehicle entry time
+
+Vehicle exit button - Check if parking fee is paid, if yes check out the vehicle
+
+Parking fee - The amount is based on entry time.
+
+Pay button - Not done
+
+![image](https://raw.githubusercontent.com/JiazhenC/FYP_project/master/Screenshot%20Images/Vehicle_Detail_Page.png)
+![image](https://raw.githubusercontent.com/JiazhenC/FYP_project/master/Screenshot%20Images/Delete_Vehicle.png)
+![image](https://raw.githubusercontent.com/JiazhenC/FYP_project/master/Screenshot%20Images/Phone%20Call.png)
+
+### Edit Vehicle Page
+
+TextBox to change the vehicle detail
+
+Edit button - Change the Firestore value
+
+Instruction text - Tell user what to do. Inform when changes are saved.
+
+![image](https://raw.githubusercontent.com/JiazhenC/FYP_project/master/Screenshot%20Images/Edit_Vehicle_Page.png)
