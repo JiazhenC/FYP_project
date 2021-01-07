@@ -67,7 +67,7 @@ class _MainPageState extends State<MainPage> {
               imageStd: 127.5,
               rotation: 90,
               numResultsPerClass: 1,
-              threshold: 0.7,
+              threshold: 0.5,
               asynch: true)
               .then((recognition) {
             detected = [];
