@@ -37,7 +37,8 @@ class _Add_Vehicle_PageState extends State<Add_Vehicle_Page> {
           'owner': _cOwner.text,
           'contact': _cContact.text,
           'entry': '-',
-          'paid': 'No'
+          'paid': 'No',
+          'troubleCaused': '0',
         })
         .then((value) => setState(() {
               instructionMessage = "Vehicle Added";
@@ -111,7 +112,7 @@ class _Add_Vehicle_PageState extends State<Add_Vehicle_Page> {
               return MaterialApp(
                 home: Scaffold(
                   body: Container(
-                    child: Text('Vehicle ${vehicleID} exists'),
+                    child: Center(child:Text('Vehicle ${vehicleID} exists'),)
                   ),
                 ),
               );

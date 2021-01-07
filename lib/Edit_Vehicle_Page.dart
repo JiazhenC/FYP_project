@@ -115,7 +115,7 @@ class _Edit_Vehicle_PageState extends State<Edit_Vehicle_Page> {
             return MaterialApp(
               home: Scaffold(
                 body: Container(
-                  child: Text('Loading vehicle\'s detail')
+                  child: Center(child:Text('Loading vehicle\'s detail')),
                 ),
               ),
             );

@@ -76,6 +76,45 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
     );
   }
 
+
+  Future<void> reportTrouble(vehicles, troubleCaused) async {
+    troubleCaused=troubleCaused+1;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(vehicleID),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Do you want to report vehicle ${vehicleID} ?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                vehicles.doc(vehicleID).update({'troubleCaused':troubleCaused});
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void recordPayment(vehicles,payment,parkFee){
+    payment.add({'vehiclesID':vehicleID,'parkFee':parkFee});
+    vehicles.doc(vehicleID).set({'paid':'yes'});
+    setState(() {
+    });
+
+  }
   void callPhone(phone){
     setState(() {
     FlutterPhoneState.startPhoneCall(phone);
@@ -86,7 +125,9 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
   Widget build(BuildContext context) {
     CollectionReference vehicles =
         FirebaseFirestore.instance.collection('vehicles');
-
+    CollectionReference payment =
+    FirebaseFirestore.instance.collection('payment');
+    MaterialColor themecolor = Colors.lightBlue;
     return FutureBuilder<DocumentSnapshot>(
       future: vehicles.doc(vehicleID).get(),
       builder:
@@ -94,7 +135,7 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
         if (snapshot.hasError) {
           return MaterialApp(
             home: Scaffold(
-              body: Text("Something went wrong"),
+              body: Center(child: Text("Something went wrong, ${vehicleID}")),
             ),
           );
         }
@@ -115,11 +156,21 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
             } else {
               parkFee = 0;
             }
+            if(data['troubleCause']==0 || data['troubleCause']==1){
+              themecolor=Colors.lightBlue;
+            }else if(data['troubleCaused']==2 || data['troubleCaused']==3){
+              themecolor=Colors.blue;
+            }else{
+              themecolor=Colors.blueGrey;
+            }
 
             return MaterialApp(
+              theme: ThemeData(
+                primaryColor: themecolor,
+              ),
               home: Scaffold(
                 appBar: AppBar(
-                  title: Text("${data['plate']}"),
+                  title: Text("Vehicle Detail Page"),
                   actions: [
                     IconButton(
                       icon: Icon(Icons.edit),
@@ -134,24 +185,34 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
                         onPressed: () {
                           _showMyDialog2(vehicles);
                         }),
+                    IconButton(
+                        icon: Icon(Icons.report),
+                        onPressed: () {
+                          reportTrouble(vehicles,data['troubleCaused']);
+                        }),
                   ],
                 ),
                 body: Center(
                   child: ListView(
                     children: [
-                      Text("Vehicle Model: ${data['model']}"),
-                      Text("Vehicle Color: ${data['color']}"),
-                      Text("Vehicle Owner: ${data['owner']}"),
+                      Container(
+                        child: Center(
+                          child: Text("${data['plate']}",style: TextStyle(fontWeight: FontWeight.bold, color: themecolor, decoration: TextDecoration.underline))),
+
+                      ),
+                      Text("Vehicle Model: ${data['model']}",style: TextStyle(fontSize: 8),),
+                      Text("Vehicle Color: ${data['color']}",style: TextStyle(fontSize: 8)),
+                      Text("Vehicle Owner: ${data['owner']}",style: TextStyle(fontSize: 8)),
                       Row(
                         children: [
-                          Text("Owner Contact Number: ${data['contact']}"),
+                          Text("Owner Contact Number: ${data['contact']}",style: TextStyle(fontSize: 8)),
                           IconButton(
                               icon: Icon(Icons.phone),
                               onPressed: (){callPhone(data['contact']);},
                           ),
                         ],
                       ),
-                      Text("Vehicle Entry Time: ${data['entry']}"),
+                      Text("Vehicle Entry Time: ${data['entry']}",style: TextStyle(fontSize: 8)),
                       Row(
                         children: [
                           TextButton(
@@ -177,9 +238,9 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
                               child: Text('Vehicle Exit')),
                         ],
                       ),
-                      Text("Parking Fee: RM ${parkFee}"),
-                      Text("Paid: ${data['paid']}"),
-                      TextButton(onPressed: null, child: Text('Pay')),
+                      Text("Parking Fee: RM ${parkFee}",style: TextStyle(fontSize: 8)),
+                      Text("Paid: ${data['paid']}",style: TextStyle(fontSize: 8)),
+                      TextButton(onPressed: (){recordPayment(vehicles,payment,parkFee);}, child: Text('Pay')),
                     ],
                   ),
                 ),
@@ -209,7 +270,7 @@ class _Vehicle_Detail_PageState extends State<Vehicle_Detail_Page> {
 
         return MaterialApp(
           home: Scaffold(
-            body: Text("Loading"),
+            body: Center(child:Text("Loading"),)
           ),
         );
       },
